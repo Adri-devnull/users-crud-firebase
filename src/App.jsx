@@ -2,6 +2,7 @@
 // import Login from './components/login/Login';
 // import Logout from './components/logout/Logout';
 // import Register from './components/register/Register';
+import CreateUser from './components/create-user/CreateUser';
 import Users from './components/users/Users';
 import { AuthProvider } from './providers/Auth.provider';
 
@@ -15,6 +16,7 @@ const App = () => {
 				<Logout />
 				<LoginWithPopUp /> */}
 				<Users />
+				<CreateUser />
 			</AuthProvider>
 		</>
 	);
