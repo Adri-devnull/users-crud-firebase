@@ -1,4 +1,4 @@
-import { getDocs } from 'firebase/firestore';
+import { onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { usersCollectionReference } from '../../config/firebase.config';
 
@@ -6,17 +6,12 @@ const Users = () => {
 	const [users, setUsers] = useState([]);
 
 	useEffect(() => {
-		getAllUsers(setUsers);
+		const subscribeToData = onSnapshot(usersCollectionReference, snapshot => {
+			getAllUsers(snapshot, setUsers);
+		});
+
+		return () => subscribeToData();
 	}, []);
-
-	// useEffect(() => {
-	// 	const subscribeToData = onSnapshot(usersCollectionReference, () => {
-	// 		getAllUsers(setUsers);
-	// 	});
-
-	// 	return () => subscribeToData();
-
-	// }, []);
 
 	if (users.length === 0) return <h2>Loading users...</h2>;
 
@@ -34,8 +29,8 @@ const Users = () => {
 	);
 };
 
-const getAllUsers = async setUsers => {
-	const { docs } = await getDocs(usersCollectionReference);
+const getAllUsers = async (snapshot, setUsers) => {
+	const { docs } = snapshot;
 	const users = docs.map(doc => ({ id: doc.id, ...doc.data() }));
 	setUsers(users);
 };
